@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">unisec-chatbot</string>
+    <string name="input_place_holder">write a message</string>
 </resources>
