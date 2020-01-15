@@ -1,4 +1,4 @@
-package com.svmc.unisec_chatbot;
+package com.vukihai.unisecchatbot;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.svmc.unisec_chatbot", appContext.getPackageName());
+        assertEquals("com.vukihai.unisecchatbot", appContext.getPackageName());
     }
 }
