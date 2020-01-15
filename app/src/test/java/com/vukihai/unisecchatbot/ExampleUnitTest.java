@@ -1,4 +1,4 @@
-package com.svmc.unisec_chatbot;
+package com.vukihai.unisecchatbot;
 
 import org.junit.Test;
 
