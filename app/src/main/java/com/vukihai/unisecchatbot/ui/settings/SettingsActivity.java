@@ -1,4 +1,4 @@
-package com.vukihai.unisecchatbot;
+package com.vukihai.unisecchatbot.ui.settings;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -7,8 +7,8 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import com.vukihai.unisecchatbot.ui.settings.SettingsFragment;
 
+import com.vukihai.unisecchatbot.R;
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
