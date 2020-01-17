@@ -3,13 +3,13 @@ package com.vukihai.unisecchatbot;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.vukihai.unisecchatbot.ui.chat.ChatFragment;
@@ -19,17 +19,19 @@ import com.vukihai.unisecchatbot.ui.statistics.StatisticsFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Intent settingIntent;
-    private LinearLayout bottomNavLinearLayout, chatInputLinearLayout;
+    private LinearLayout chatInputLinearLayout;
     private ImageView profileImageView, chatImageView, statisticImageView;
-    private HorizontalScrollView suggestButtonScrollView;
+    private HorizontalScrollView suggestHorizontalScrollView;
+    private ConstraintLayout bottomNavConstraintLayout;
 
     private static final int NUM_PAGES = 3;
     private ViewPager mViewPager;
@@ -43,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNavLinearLayout = findViewById(R.id.linear_bottom_nav);
+        bottomNavConstraintLayout = findViewById(R.id.linear_bottom_nav);
         chatInputLinearLayout = findViewById(R.id.linear_chat_input);
         profileImageView = findViewById(R.id.img_profile);
         chatImageView = findViewById(R.id.img_chat);
         statisticImageView = findViewById(R.id.img_statistics);
-        suggestButtonScrollView = findViewById(R.id.scroll_suggest_button);
+        suggestHorizontalScrollView = findViewById(R.id.scroll_suggest_button);
 
         // instance.
         fragments = new Fragment[NUM_PAGES];
@@ -62,26 +64,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setPageTransformer(true, new MyPagerTransformer());
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(1);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if(position == 1) {
-                    suggestButtonScrollView.setVisibility(View.VISIBLE);
-                } else {
-                    suggestButtonScrollView.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 //        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -141,6 +124,28 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
     }
 
+    @Override
+    public void onClick(View view) {
+        Log.d("vukihai", "onclick " + view.getId());
+        switch (view.getId()){
+            case R.id.img_chat:
+                mViewPager.setCurrentItem(1, true);
+                break;
+            case R.id.img_profile:
+                if(mViewPager.getCurrentItem() == 2)
+                    mViewPager.setCurrentItem(0, false);
+                else
+                    mViewPager.setCurrentItem(0,true);
+                break;
+            case R.id.img_statistics:
+                if(mViewPager.getCurrentItem() == 0)
+                    mViewPager.setCurrentItem(2, false);
+                else
+                    mViewPager.setCurrentItem(2,true);
+                break;
+        }
+    }
+
 
     private class SlidePagerAdapter extends FragmentStatePagerAdapter {
 
@@ -160,6 +165,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * animation for bottom navigation.
+     */
     private class MyPagerTransformer implements ViewPager.PageTransformer {
 
         @Override
@@ -168,28 +177,36 @@ public class MainActivity extends AppCompatActivity {
             int pageWidth = page.getWidth();
             if (mViewPager.getCurrentItem() == 0) {
                 if (position >= -1 && position <= 0) {
-                    bottomNavLinearLayout.setTranslationY(position * pageHeight);
+                    suggestHorizontalScrollView.setTranslationY(position * pageHeight);
+                    suggestHorizontalScrollView.setAlpha(-position*3-2);
+                    bottomNavConstraintLayout.setTranslationY(position * pageHeight);
                     chatInputLinearLayout.setTranslationY(position * pageHeight);
                     chatImageView.setTranslationY(position * pageHeight);
                     profileImageView.setTranslationX(position * (pageWidth/10));
                     statisticImageView.setTranslationX(-position * (pageWidth/10));
+
                 }
             }
             if (mViewPager.getCurrentItem() == 1) {
                 if (position < -1) {
                     page.setAlpha(1);
                 } else if (position <= 0) {
-                    bottomNavLinearLayout.setTranslationY(position *pageHeight);
+                    suggestHorizontalScrollView.setTranslationY(position * pageHeight);
+                    suggestHorizontalScrollView.setAlpha(-position*3-2);
+                    bottomNavConstraintLayout.setTranslationY(position *pageHeight);
                     chatInputLinearLayout.setTranslationY(position *pageHeight );
                     chatImageView.setTranslationY(position * pageHeight);
                     profileImageView.setTranslationX(position * (pageWidth/10));
                     statisticImageView.setTranslationX(-position * (pageWidth/10));
                 } else if (position <= 1) {
-                    bottomNavLinearLayout.setTranslationY(-position* pageHeight);
+                    suggestHorizontalScrollView.setTranslationY(-position * pageHeight);
+                    suggestHorizontalScrollView.setAlpha(position*3-2);
+                    bottomNavConstraintLayout.setTranslationY(-position* pageHeight);
                     chatInputLinearLayout.setTranslationY(-position* pageHeight);
                     chatImageView.setTranslationY(-position* pageHeight);
                     profileImageView.setTranslationX(-position * (pageWidth/10));
                     statisticImageView.setTranslationX(position * (pageWidth/10));
+
                 } else {
                     page.setAlpha(1);
                 }
@@ -197,11 +214,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (mViewPager.getCurrentItem() == 2) {
                 if (position >= 0 && position <= 1) {
-                    bottomNavLinearLayout.setTranslationY(-position * pageHeight);
+                    suggestHorizontalScrollView.setTranslationY(-position * pageHeight);
+                    suggestHorizontalScrollView.setAlpha(position*3-2);
+                    bottomNavConstraintLayout.setTranslationY(-position * pageHeight);
                     chatInputLinearLayout.setTranslationY(-position * pageHeight);
                     chatImageView.setTranslationY(-position * pageHeight);
                     profileImageView.setTranslationX(-position * (pageWidth/10));
                     statisticImageView.setTranslationX(position * (pageWidth/10));
+
                 }
             }
 
