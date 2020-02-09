@@ -10,7 +10,7 @@ public class StatisticsViewModel extends ViewModel {
 
     public StatisticsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Màn hình thống kê của Thắng");
+        mText.setValue("Biểu đồ tỉ lệ tra cứu của các trường đại học");
     }
 
     public LiveData<String> getText() {
