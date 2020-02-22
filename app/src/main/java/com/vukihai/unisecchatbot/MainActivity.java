@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView profileImageView, chatImageView, statisticImageView;
     private HorizontalScrollView suggestHorizontalScrollView;
     private ConstraintLayout bottomNavConstraintLayout;
+    private EditText chatMessageEditText;
 
     private static final int NUM_PAGES = 3;
     private ViewPager mViewPager;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chatImageView = findViewById(R.id.img_chat);
         statisticImageView = findViewById(R.id.img_statistics);
         suggestHorizontalScrollView = findViewById(R.id.scroll_suggest_button);
-
+        chatMessageEditText = findViewById(R.id.et_input_message);
         // instance.
         fragments = new Fragment[NUM_PAGES];
         fragments[0] = new ProfileFragment();
@@ -126,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Log.d("vukihai", "onclick " + view.getId());
         switch (view.getId()){
             case R.id.img_chat:
                 mViewPager.setCurrentItem(1, true);
@@ -142,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mViewPager.setCurrentItem(2, false);
                 else
                     mViewPager.setCurrentItem(2,true);
+                break;
+            case R.id.btn_send:
+                ((ChatFragment)fragments[1]).send(chatMessageEditText.getText().toString());
+                chatMessageEditText.setText("");
                 break;
         }
     }
