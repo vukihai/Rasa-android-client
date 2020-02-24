@@ -41,8 +41,7 @@ public class ChatFragment extends Fragment {
         mSocket.connect();
         return root;
     }
-    public void send(String message){
-        this.chatMessagesAdapter.addMessage(new ChatMessage(message, false));
+    public void send(final String message){
         JSONObject sendData = new JSONObject();
         try {
             sendData.put("message", message);
@@ -50,8 +49,14 @@ public class ChatFragment extends Fragment {
         } catch (JSONException e) {
 
         }
-        Log.d("vukihai", sendData.toString());
         mSocket.emit("user_uttered", sendData);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatMessagesAdapter.addMessage(new ChatMessage(message, false));
+                chatMessagesListView.setSelection(chatMessagesAdapter.getCount());
+            }
+        });
     }
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
@@ -60,10 +65,15 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
-                    String mess;
                     try{
-                        mess = data.getString("text");
-                        chatMessagesAdapter.addMessage(new ChatMessage(mess, true));
+                        final String mess = data.getString("text");
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                chatMessagesAdapter.addMessage(new ChatMessage(mess, true));
+                                chatMessagesListView.setSelection(chatMessagesAdapter.getCount()-1);
+                            }
+                        });
                     } catch (JSONException e){
 
                     }
