@@ -6,4 +6,5 @@
     <dimen name="bottom_navigation_top_padding">8dp</dimen>
     <dimen name="bottom_navigation_bottom_padding">12dp</dimen>
     <dimen name="bottom_navigation_height_op">-56dp</dimen>
+    <dimen name="bottom_chat_listview_margin">112dp</dimen>
 </resources>

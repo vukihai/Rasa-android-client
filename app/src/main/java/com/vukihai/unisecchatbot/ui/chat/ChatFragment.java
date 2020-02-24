@@ -1,35 +1,84 @@
 package com.vukihai.unisecchatbot.ui.chat;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
+import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.vukihai.unisecchatbot.R;
+import com.vukihai.unisecchatbot.data.model.ChatMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 
 public class ChatFragment extends Fragment {
+    private ChatMessagesAdapter chatMessagesAdapter;
+    private ListView chatMessagesListView;
+    private Socket mSocket;
+    {
+        try{
+            mSocket = IO.socket("http://192.168.2.111:5005");
+        } catch (URISyntaxException e){
 
-    private ChatViewModel chatViewModel;
-
+        }
+    }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        chatViewModel =
-                ViewModelProviders.of(this).get(ChatViewModel.class);
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        chatViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        chatMessagesAdapter = new ChatMessagesAdapter(getContext());
+        chatMessagesListView = root.findViewById(R.id.lv_chat_messages);
+        chatMessagesListView.setAdapter(chatMessagesAdapter);
+        mSocket.on("bot_uttered",onNewMessage);
+        mSocket.connect();
         return root;
     }
+    public void send(final String message){
+        JSONObject sendData = new JSONObject();
+        try {
+            sendData.put("message", message);
+            sendData.put("sender", "123");
+        } catch (JSONException e) {
+
+        }
+        mSocket.emit("user_uttered", sendData);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatMessagesAdapter.addMessage(new ChatMessage(message, false));
+                chatMessagesListView.setSelection(chatMessagesAdapter.getCount());
+            }
+        });
+    }
+    private Emitter.Listener onNewMessage = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    try{
+                        final String mess = data.getString("text");
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                chatMessagesAdapter.addMessage(new ChatMessage(mess, true));
+                                chatMessagesListView.setSelection(chatMessagesAdapter.getCount()-1);
+                            }
+                        });
+                    } catch (JSONException e){
+
+                    }
+                }
+            });
+        }
+    };
 }
