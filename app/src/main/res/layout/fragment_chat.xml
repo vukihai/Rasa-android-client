@@ -7,5 +7,9 @@
         android:id="@+id/lv_chat_messages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottom_chat_listview_margin"></ListView>
+        android:layout_marginBottom="@dimen/bottom_chat_listview_margin"
+        android:background="@color/colorChatBackground"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        ></ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>

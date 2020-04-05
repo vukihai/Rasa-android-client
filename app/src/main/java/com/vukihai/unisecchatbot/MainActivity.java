@@ -3,6 +3,7 @@ package com.vukihai.unisecchatbot;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle((Html.fromHtml("<font color=\"#000000\">" + getString(R.string.app_name) + "</font>")));
+        getSupportActionBar().setSubtitle((Html.fromHtml("<font color=\"#718792\">" + getString(R.string.app_name_subtitle) + "</font>")));
         bottomNavConstraintLayout = findViewById(R.id.linear_bottom_nav);
         chatInputLinearLayout = findViewById(R.id.linear_chat_input);
         profileImageView = findViewById(R.id.img_profile);
@@ -104,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (settingIntent == null) settingIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingIntent);
         }
+        if (id == android.R.id.home)
+            this.finish();
         return super.onOptionsItemSelected(item);
     }
 

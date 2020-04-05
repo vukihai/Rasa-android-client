@@ -64,18 +64,84 @@ public class ChatFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    try{
-                        final String mess = data.getString("text");
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                chatMessagesAdapter.addMessage(new ChatMessage(mess, true));
-                                chatMessagesListView.setSelection(chatMessagesAdapter.getCount()-1);
+                    try {
+//                    for( int i = 0; i <args.length; i++) {
+//                        Log.d("vukihai", args[i].toString());
+//                    }
+                        JSONObject data = (JSONObject) args[0];
+                        try {
+                            Log.d("vukihai", data.toString());
+                            final String mess = data.getString("text");
+                            if (mess != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatMessagesAdapter.addMessage(new ChatMessage(mess, true));
+                                        chatMessagesListView.setSelection(chatMessagesAdapter.getCount() - 1);
+                                    }
+                                });
+                                return;
                             }
-                        });
-                    } catch (JSONException e){
+                        } catch (JSONException e) {
+                            Log.d("vukihai", e.toString());
 
+                        }
+                        try {
+                            final String table = data.getJSONArray("table").toString();
+                            Log.d(" ", table);
+                            if (table != null) {
+                                final ChatMessage mes = new ChatMessage(table, true);
+                                mes.setBotTable(true);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatMessagesAdapter.addMessage(mes);
+                                        chatMessagesListView.setSelection(chatMessagesAdapter.getCount() - 1);
+                                    }
+                                });
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            Log.d("vukihai", e.toString());
+                        }
+                        try {
+                            final String slider = data.getJSONArray(("slider")).toString();
+                            if (slider != null) {
+                                final ChatMessage mes = new ChatMessage(slider, true);
+                                mes.setBotSlider(true);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatMessagesAdapter.addMessage(mes);
+                                        chatMessagesListView.setSelection(chatMessagesAdapter.getCount() - 1);
+                                    }
+                                });
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            Log.d("vukihai", e.toString());
+
+                        }
+                        try {
+                            final String slider = data.getJSONArray(("htmlview")).toString();
+                            if (slider != null) {
+                                final ChatMessage mes = new ChatMessage(slider, true);
+                                mes.setBotHtmlview(true);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatMessagesAdapter.addMessage(mes);
+                                        chatMessagesListView.setSelection(chatMessagesAdapter.getCount() - 1);
+                                    }
+                                });
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            Log.d("vukihai", e.toString());
+
+                        }
+                    }catch (Exception e){
+                        Log.d("vukihai", e.toString());
                     }
                 }
             });

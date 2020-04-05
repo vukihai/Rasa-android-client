@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#757575</color>
+    <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#494949</color>
     <color name="colorAccent">#494949</color>
     <color name="transparent">#80FFFFFF</color>
+    <color name="colorChatBackground">#B3C8DB</color>
+    <color name="colorUserMessage">#cabf45</color>
+    <color name="colorUserTextMessage">#474321</color>
+    <color name="colorPrimaryText">#000000</color>
 </resources>
