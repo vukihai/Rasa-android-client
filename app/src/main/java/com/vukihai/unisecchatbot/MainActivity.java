@@ -3,16 +3,19 @@ package com.vukihai.unisecchatbot;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.vukihai.unisecchatbot.ui.chat.ChatFragment;
 import com.vukihai.unisecchatbot.ui.profile.ProfileFragment;
 import com.vukihai.unisecchatbot.ui.settings.SettingsActivity;
@@ -34,6 +37,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HorizontalScrollView suggestHorizontalScrollView;
     private ConstraintLayout bottomNavConstraintLayout;
     private EditText chatMessageEditText;
+//    private BottomSheetBehavior bottomSheetBehavior;
+
+
+    //
+//    TextView textViewBottomSheetState;
+//    Button toggleBottomSheet;
+    //
 
     private static final int NUM_PAGES = 3;
     private ViewPager mViewPager;
@@ -46,14 +56,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle((Html.fromHtml("<font color=\"#000000\">" + getString(R.string.app_name) + "</font>")));
+        getSupportActionBar().setSubtitle((Html.fromHtml("<font color=\"#718792\">" + getString(R.string.app_name_subtitle) + "</font>")));
         bottomNavConstraintLayout = findViewById(R.id.linear_bottom_nav);
         chatInputLinearLayout = findViewById(R.id.linear_chat_input);
         profileImageView = findViewById(R.id.img_profile);
         chatImageView = findViewById(R.id.img_chat);
         statisticImageView = findViewById(R.id.img_statistics);
         suggestHorizontalScrollView = findViewById(R.id.scroll_suggest_button);
-        chatMessageEditText = findViewById(R.id.et_input_message);
+        chatMessageEditText = findViewById(R.id.edt_input_message);
+
+//        toggleBottomSheet = findViewById(R.id.);
+//        textViewBottomSheetState = findViewById(R.id.textViewState);
+//        ConstraintLayout bottomSheetConstraintLayout = findViewById(R.id.bottom_sheet);
+//        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetConstraintLayout);
+//        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+//            @Override
+//            public void onStateChanged(@NonNull View view, int i) {
+//                switch (i) {
+//                    case BottomSheetBehavior.STATE_HIDDEN:
+////                        textViewBottomSheetState.setText("STATE HIDDEN");
+//                        break;
+//                    case BottomSheetBehavior.STATE_EXPANDED:
+////                        textViewBottomSheetState.setText("STATE EXPANDED");
+//                        // update toggle button text
+////                        toggleBottomSheet.setText("Expand BottomSheet");
+//                        break;
+//                    case BottomSheetBehavior.STATE_COLLAPSED:
+////                        textViewBottomSheetState.setText("STATE COLLAPSED");
+//                        // update collapsed button text
+////                        toggleBottomSheet.setText("Collapse BottomSheet");
+//                        break;
+//                    case BottomSheetBehavior.STATE_DRAGGING:
+////                        textViewBottomSheetState.setText("STATE DRAGGING");
+//                        break;
+//                    case BottomSheetBehavior.STATE_SETTLING:
+////                        textViewBottomSheetState.setText("STATE SETTLING");
+//                        break;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onSlide(@NonNull View view, float v) {
+//                if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+////                    toggleBottomSheet.setText("Collapse BottomSheet");
+//                } else {
+//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+////                    toggleBottomSheet.setText("Expand BottomSheet");
+//                }
+//
+//            }
+//        });
         // instance.
         fragments = new Fragment[NUM_PAGES];
         fragments[0] = new ProfileFragment();
@@ -104,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (settingIntent == null) settingIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingIntent);
         }
+        if (id == android.R.id.home)
+            this.finish();
         return super.onOptionsItemSelected(item);
     }
 
