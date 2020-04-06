@@ -31,4 +31,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="main_activity_double_back_press_once">Please click back again to exit</string>
     <string name="input_place_holder">Aa</string>
+    <string name="speech_prompt">Đang nghe...</string>
+    <string name="speech_not_supported">Thiết bị không hỗ trợ nhận diện giọng nói.</string>
 </resources>

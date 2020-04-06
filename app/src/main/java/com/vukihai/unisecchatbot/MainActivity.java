@@ -1,15 +1,20 @@
 package com.vukihai.unisecchatbot;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,13 +35,18 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final int REQ_CODE_SPEECH_INPUT = 1;
     private Intent settingIntent;
     private LinearLayout chatInputLinearLayout;
     private ImageView profileImageView, chatImageView, statisticImageView;
     private HorizontalScrollView suggestHorizontalScrollView;
     private ConstraintLayout bottomNavConstraintLayout;
     private EditText chatMessageEditText;
+    private ImageButton sendButton, voiceButton;
 //    private BottomSheetBehavior bottomSheetBehavior;
 
 
@@ -66,50 +76,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         statisticImageView = findViewById(R.id.img_statistics);
         suggestHorizontalScrollView = findViewById(R.id.scroll_suggest_button);
         chatMessageEditText = findViewById(R.id.edt_input_message);
-
-//        toggleBottomSheet = findViewById(R.id.);
-//        textViewBottomSheetState = findViewById(R.id.textViewState);
-//        ConstraintLayout bottomSheetConstraintLayout = findViewById(R.id.bottom_sheet);
-//        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetConstraintLayout);
-//        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-//            @Override
-//            public void onStateChanged(@NonNull View view, int i) {
-//                switch (i) {
-//                    case BottomSheetBehavior.STATE_HIDDEN:
-////                        textViewBottomSheetState.setText("STATE HIDDEN");
-//                        break;
-//                    case BottomSheetBehavior.STATE_EXPANDED:
-////                        textViewBottomSheetState.setText("STATE EXPANDED");
-//                        // update toggle button text
-////                        toggleBottomSheet.setText("Expand BottomSheet");
-//                        break;
-//                    case BottomSheetBehavior.STATE_COLLAPSED:
-////                        textViewBottomSheetState.setText("STATE COLLAPSED");
-//                        // update collapsed button text
-////                        toggleBottomSheet.setText("Collapse BottomSheet");
-//                        break;
-//                    case BottomSheetBehavior.STATE_DRAGGING:
-////                        textViewBottomSheetState.setText("STATE DRAGGING");
-//                        break;
-//                    case BottomSheetBehavior.STATE_SETTLING:
-////                        textViewBottomSheetState.setText("STATE SETTLING");
-//                        break;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onSlide(@NonNull View view, float v) {
-//                if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-////                    toggleBottomSheet.setText("Collapse BottomSheet");
-//                } else {
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-////                    toggleBottomSheet.setText("Expand BottomSheet");
-//                }
-//
-//            }
-//        });
+        sendButton = findViewById(R.id.btn_send);
+        voiceButton = findViewById(R.id.btn_voice);
         // instance.
         fragments = new Fragment[NUM_PAGES];
         fragments[0] = new ProfileFragment();
@@ -123,6 +91,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setCurrentItem(1);
 
+        chatMessageEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.toString().length() != 0){
+                    sendButton.setVisibility(View.VISIBLE);
+                    voiceButton.setVisibility(View.GONE);
+                } else {
+                    sendButton.setVisibility(View.GONE);
+                    voiceButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 //        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -206,10 +192,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ((ChatFragment)fragments[1]).send(chatMessageEditText.getText().toString());
                 chatMessageEditText.setText("");
                 break;
+            case R.id.btn_voice:
+                promptSpeechInput();
+                break;
         }
     }
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        switch (requestCode) {
+            case REQ_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
 
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    ((ChatFragment)fragments[1]).send(result.get(0));
+                }
+                break;
+            }
+
+        }
+    }
     private class SlidePagerAdapter extends FragmentStatePagerAdapter {
 
         public SlidePagerAdapter(@NonNull FragmentManager fm, int behavior) {
