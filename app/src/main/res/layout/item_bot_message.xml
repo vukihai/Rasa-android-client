@@ -11,9 +11,9 @@
         android:id="@+id/avatar"
         android:layout_alignParentLeft="true"
         android:scaleType="centerInside"
-        android:background="@drawable/bg_bot_avatar"
-        android:layout_width="34dp"
-        android:layout_height="34dp" />
+        android:background="@drawable/ic_bot_avatar"
+        android:layout_width="42dp"
+        android:layout_height="42dp" />
 
     <TextView
         android:id="@+id/tv_bot_name"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
-        android:text="unisec_Chatbot"/>
+        android:text="unisec bot"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ public class ChatFragment extends Fragment {
     {
         try{
             mSocket = IO.socket("http://192.168.2.111:5005");
+
         } catch (URISyntaxException e){
 
         }
@@ -89,7 +90,7 @@ public class ChatFragment extends Fragment {
                         try {
                             final String table = data.getJSONArray("table").toString();
                             Log.d(" ", table);
-                            if (table != null) {
+                            if (table.length() != 0) {
                                 final ChatMessage mes = new ChatMessage(table, true);
                                 mes.setBotTable(true);
                                 getActivity().runOnUiThread(new Runnable() {
