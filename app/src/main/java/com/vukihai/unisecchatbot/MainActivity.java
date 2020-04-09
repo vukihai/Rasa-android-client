@@ -195,8 +195,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_voice:
                 promptSpeechInput();
                 break;
+
         }
     }
+    public void sendMessage(String message) {
+        if(message.length() != 0)
+            ((ChatFragment)fragments[1]).send(message);
+    }
+//    }
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
