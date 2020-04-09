@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_slider_item"
+    android:layout_height="@dimen/bot_slider_height"
+    android:layout_width="@dimen/bot_slider_width"
+    android:background="@drawable/bg_bot_slider_item"
+    android:textAlignment="center"
+    android:text="test. this is a subitem"
+    android:layout_margin="@dimen/bot_slider_margin"/>
