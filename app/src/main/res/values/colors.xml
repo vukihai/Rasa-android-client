@@ -8,4 +8,7 @@
     <color name="colorUserMessage">#cabf45</color>
     <color name="colorUserTextMessage">#474321</color>
     <color name="colorPrimaryText">#000000</color>
+    <color name="network_status_connected">#FFFFFF</color>
+    <color name="network_status_disconnect">#FF0000</color>
+
 </resources>
