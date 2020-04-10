@@ -142,6 +142,8 @@ class SliderAdapter extends RecyclerView.Adapter {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            } catch (Exception e) {
+                Log.d("vukihai", "error while load slider item image" + e.toString());
             }
             return img;
         }
