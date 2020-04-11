@@ -5,15 +5,7 @@
     android:layout_margin="@dimen/bot_slider_margin"
     android:background="@drawable/bg_bot_slider_item"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
-        android:id="@+id/text_slider_item"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test. this is a subitem"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+
     <ImageView
         android:id="@+id/img_slider_item"
         android:layout_width="match_parent"
@@ -22,4 +14,14 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:scaleType="fitCenter"
         ></ImageView>
+    <TextView
+        android:id="@+id/text_slider_item"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="test. this is a subitem"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@color/white"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
