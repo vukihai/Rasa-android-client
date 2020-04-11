@@ -53,7 +53,7 @@ class SliderAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((RecyclerViewHolder) holder).sliderTextView.setText(this.sliderItems.get(position).getName());
-        Picasso.get().load(this.sliderItems.get(position).getImg()).into( ((RecyclerViewHolder) holder).sliderImageView);
+        Picasso.get().load(this.sliderItems.get(position).getImg()).fit().centerCrop().placeholder(R.drawable.anim_process).into( ((RecyclerViewHolder) holder).sliderImageView);
     }
     @Override
     public int getItemCount() {
