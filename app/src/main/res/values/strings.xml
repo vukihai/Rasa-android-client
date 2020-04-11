@@ -33,4 +33,6 @@
     <string name="input_place_holder">Aa</string>
     <string name="speech_prompt">Đang nghe...</string>
     <string name="speech_not_supported">Thiết bị không hỗ trợ nhận diện giọng nói.</string>
+    <string name="connected">đã kết nối</string>
+    <string name="connect_error">không có kết nối</string>
 </resources>

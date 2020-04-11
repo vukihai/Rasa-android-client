@@ -1,15 +1,20 @@
 package com.vukihai.unisecchatbot.ui.chat;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.vukihai.unisecchatbot.MainActivity;
 import com.vukihai.unisecchatbot.R;
 
@@ -30,7 +35,7 @@ class SliderAdapter extends RecyclerView.Adapter {
             JSONArray jsonArr = new JSONArray(json);
             for(int i=0; i< jsonArr.length(); i++){
                 JSONObject obj = jsonArr.getJSONObject(i);
-                sliderItems.add(new SliderItem(obj.getString("name"), obj.getString("payload")));
+                sliderItems.add(new SliderItem(obj.getString("name"), obj.getString("payload"), obj.getString("img")));
             }
         } catch (JSONException e){
             Log.d("vukihai", "error while parse json: " + e.toString());
@@ -48,6 +53,7 @@ class SliderAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((RecyclerViewHolder) holder).sliderTextView.setText(this.sliderItems.get(position).getName());
+        Picasso.get().load(this.sliderItems.get(position).getImg()).into( ((RecyclerViewHolder) holder).sliderImageView);
     }
     @Override
     public int getItemCount() {
@@ -56,10 +62,11 @@ class SliderAdapter extends RecyclerView.Adapter {
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         TextView sliderTextView;
-
+        ImageView sliderImageView;
         public RecyclerViewHolder(View itemView) {
             super(itemView);
-            sliderTextView = (TextView) itemView.findViewById(R.id.text_slider_item);
+            sliderTextView = itemView.findViewById(R.id.text_slider_item);
+            sliderImageView = itemView.findViewById(R.id.img_slider_item);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,12 +78,12 @@ class SliderAdapter extends RecyclerView.Adapter {
     }
 
     private class SliderItem {
-        String name, payload;
-        // image
-
-        public SliderItem(String name, String payload) {
+        private String name, payload, img;
+        private Bitmap imgBitmap;
+        public SliderItem(String name, String payload, String img) {
             this.name = name;
             this.payload = payload;
+            this.img = img;
         }
 
         public String getName() {
@@ -91,8 +98,21 @@ class SliderAdapter extends RecyclerView.Adapter {
             return payload;
         }
 
-        public void setPayload(String payload) {
-            this.payload = payload;
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+
+        public Bitmap getImgBitmap() {
+            return imgBitmap;
+        }
+
+        public void setImgBitmap(Bitmap imgBitmap) {
+            this.imgBitmap = imgBitmap;
         }
     }
+
 }

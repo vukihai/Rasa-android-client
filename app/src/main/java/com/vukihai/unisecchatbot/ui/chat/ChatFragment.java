@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.vukihai.unisecchatbot.MainActivity;
 import com.vukihai.unisecchatbot.R;
 import com.vukihai.unisecchatbot.data.model.ChatMessage;
 
@@ -24,25 +26,30 @@ public class ChatFragment extends Fragment {
     private ChatMessagesAdapter chatMessagesAdapter;
     private ListView chatMessagesListView;
     private Socket mSocket;
+
     {
-        try{
+        try {
             mSocket = IO.socket("http://192.168.2.111:5005");
 
-        } catch (URISyntaxException e){
+        } catch (URISyntaxException e) {
 
         }
     }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_chat, container, false);
         chatMessagesAdapter = new ChatMessagesAdapter(getContext());
         chatMessagesListView = root.findViewById(R.id.lv_chat_messages);
         chatMessagesListView.setAdapter(chatMessagesAdapter);
-        mSocket.on("bot_uttered",onNewMessage);
+        mSocket.on("bot_uttered", onNewMessage);
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT, onConnect);
         mSocket.connect();
         return root;
     }
-    public void send(final String message){
+
+    public void send(final String message) {
         JSONObject sendData = new JSONObject();
         try {
             sendData.put("message", message);
@@ -59,6 +66,29 @@ public class ChatFragment extends Fragment {
             }
         });
     }
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((MainActivity) getActivity()).updateNetworkStatus(getContext().getString(R.string.connected), View.GONE);
+                }
+            });
+        }
+    };
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((MainActivity) getActivity()).updateNetworkStatus(getContext().getString(R.string.connect_error), View.VISIBLE);
+                }
+            });
+
+        }
+    };
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
@@ -141,7 +171,7 @@ public class ChatFragment extends Fragment {
                             Log.d("vukihai", e.toString());
 
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         Log.d("vukihai", e.toString());
                     }
                 }

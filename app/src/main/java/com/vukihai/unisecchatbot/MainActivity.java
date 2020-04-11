@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ConstraintLayout bottomNavConstraintLayout;
     private EditText chatMessageEditText;
     private ImageButton sendButton, voiceButton;
+    private TextView networkStatusTextView;
 //    private BottomSheetBehavior bottomSheetBehavior;
 
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         chatMessageEditText = findViewById(R.id.edt_input_message);
         sendButton = findViewById(R.id.btn_send);
         voiceButton = findViewById(R.id.btn_voice);
+        networkStatusTextView = findViewById(R.id.tv_network_status);
         // instance.
         fragments = new Fragment[NUM_PAGES];
         fragments[0] = new ProfileFragment();
@@ -150,7 +152,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.finish();
         return super.onOptionsItemSelected(item);
     }
-
+    public void updateNetworkStatus(String status, int visiblility) {
+        networkStatusTextView.setText(status);
+        networkStatusTextView.setVisibility(visiblility);
+    }
     /**
      * handle backpressed: press 2 time to exit.
      */

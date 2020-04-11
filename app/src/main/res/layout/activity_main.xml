@@ -152,4 +152,15 @@
             android:scaleType="fitCenter" />
     </LinearLayout>
 <!--    <include layout="@layout/bottom_sheet"/>-->
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_network_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/connected"
+        android:textAlignment="center"
+        android:textColor="@color/network_status_disconnect"
+        android:background="@color/network_status_connected"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
