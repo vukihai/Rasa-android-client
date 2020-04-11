@@ -14,22 +14,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.vukihai.unisecchatbot.MainActivity;
 import com.vukihai.unisecchatbot.R;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +53,7 @@ class SliderAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((RecyclerViewHolder) holder).sliderTextView.setText(this.sliderItems.get(position).getName());
-        new DownloadImageTask(((RecyclerViewHolder) holder).sliderImageView).execute(this.sliderItems.get(position).getImg());
+        Picasso.get().load(this.sliderItems.get(position).getImg()).into( ((RecyclerViewHolder) holder).sliderImageView);
     }
     @Override
     public int getItemCount() {
@@ -87,7 +79,7 @@ class SliderAdapter extends RecyclerView.Adapter {
 
     private class SliderItem {
         private String name, payload, img;
-
+        private Bitmap imgBitmap;
         public SliderItem(String name, String payload, String img) {
             this.name = name;
             this.payload = payload;
@@ -113,41 +105,14 @@ class SliderAdapter extends RecyclerView.Adapter {
         public void setImg(String img) {
             this.img = img;
         }
+
+        public Bitmap getImgBitmap() {
+            return imgBitmap;
+        }
+
+        public void setImgBitmap(Bitmap imgBitmap) {
+            this.imgBitmap = imgBitmap;
+        }
     }
-    static private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            // TODO Auto-generated method stub
-            String urlStr = params[0];
-            Bitmap img = null;
-
-            HttpClient client = new DefaultHttpClient();
-            HttpGet request = new HttpGet(urlStr);
-            HttpResponse response;
-            try {
-                response = (HttpResponse)client.execute(request);
-                HttpEntity entity = response.getEntity();
-                BufferedHttpEntity bufferedEntity = new BufferedHttpEntity(entity);
-                InputStream inputStream = bufferedEntity.getContent();
-                img = BitmapFactory.decodeStream(inputStream);
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (Exception e) {
-                Log.d("vukihai", "error while load slider item image" + e.toString());
-            }
-            return img;
-        }
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }}
 }
