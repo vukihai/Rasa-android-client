@@ -109,43 +109,32 @@ public class ChatMessagesAdapter extends BaseAdapter {
                 TableAdapter adapter = new TableAdapter(context);
                 tableView.setAdapter(adapter);
                 tableView.setTableViewListener(new TableListener(tableView));
-                List<BotColumnHeader> a = new ArrayList<>();
-                a.add(new BotColumnHeader("tên trường"));
-                a.add(new BotColumnHeader("tên ngành"));
-                a.add(new BotColumnHeader("điểm chuẩn"));
-                a.add(new BotColumnHeader("khối thi"));
-//        List<BotRowHeader> b = new ArrayList<>(); b.add(new BotRowHeader("bot row header"));
-                List<BotCell> t = new ArrayList<>();
-                t.add(new BotCell("0-0", "đại học công nghệ"));
-                t.add(new BotCell("1-0", "công nghệ thông tin"));
-                t.add(new BotCell("2-0", "24"));
-                t.add(new BotCell("3-0", "a00"));
-                List<BotCell> t1 = new ArrayList<>();
-                t1.add(new BotCell("0-1", "đại học công nghệ"));
-                t1.add(new BotCell("1-1", "công nghệ thông tin"));
-                t1.add(new BotCell("2-1", "24"));
-                t1.add(new BotCell("3-1", "a00"));
-                List<List<BotCell>> c = new ArrayList<>();c.add(t);c.add(t1);
-
-                adapter.setAllItems(a, null, c);
+                List<BotColumnHeader> header = new ArrayList<>();
+                List<List<BotCell>> content = new ArrayList<>();
                 String [][] tableContent;
                 try {
                     JSONArray jsona = new JSONArray(message.getText());
                     tableContent = new String[jsona.length()][jsona.getJSONArray(0).length()];
-                    for (int j=0; j <jsona.length(); j++){
+                    for(int k=0; k<jsona.getJSONArray(0).length(); k++){
+                        header.add(new BotColumnHeader(jsona.getJSONArray(0).getString(k)));
+                    }
+                    for (int j=1; j <jsona.length(); j++){
+                        List<BotCell> tmp = new ArrayList<>();
                         JSONArray jsonsub = jsona.getJSONArray(j);
                         for(int k=0; k<jsonsub.length(); k++){
-                            tableContent[j][k] = jsonsub.getString(k);
+                            tmp.add(new BotCell(""+(j-1)+"+"+k,jsonsub.getString(k)));
                         }
+                        content.add(tmp);
                     }
 
 //                    tableView.setDataAdapter(new SimpleTableDataAdapter(context, tableContent));
                     view.findViewById(R.id.tv_view_more).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            showTablePopup(tableContent);
+                            showTablePopup(header, content);
                         }
                     });
+                    adapter.setAllItems(header, null, content);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -182,32 +171,12 @@ public class ChatMessagesAdapter extends BaseAdapter {
         });
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
-    private void showTablePopup(String [][] mes) {
+    private void showTablePopup(List<BotColumnHeader> header, List<List<BotCell>> content) {
         View view = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_bot_table_full, null, false);
         TableAdapter adapter = new TableAdapter(context);
         ((TableView) view.findViewById(R.id.table_bot_message)).setAdapter(adapter);
         ((TableView) view.findViewById(R.id.table_bot_message)).setTableViewListener(new TableListener(view.findViewById(R.id.table_bot_message)));
-
-//        BotTableModel model = new BotTableModel();
-        List<BotColumnHeader> a = new ArrayList<>();
-        a.add(new BotColumnHeader("tên trường"));
-        a.add(new BotColumnHeader("tên ngành"));
-        a.add(new BotColumnHeader("điểm chuẩn"));
-        a.add(new BotColumnHeader("khối thi"));
-//        List<BotRowHeader> b = new ArrayList<>(); b.add(new BotRowHeader("bot row header"));
-        List<BotCell> t = new ArrayList<>();
-        t.add(new BotCell("0-0", "đại học công nghệ"));
-        t.add(new BotCell("1-0", "công nghệ thông tin"));
-        t.add(new BotCell("2-0", "24"));
-        t.add(new BotCell("3-0", "a00"));
-        List<BotCell> t1 = new ArrayList<>();
-        t1.add(new BotCell("0-1", "đại học công nghệ"));
-        t1.add(new BotCell("1-1", "công nghệ thông tin"));
-        t1.add(new BotCell("2-1", "24"));
-        t1.add(new BotCell("3-1", "a00"));
-        List<List<BotCell>> c = new ArrayList<>();c.add(t);c.add(t1);
-
-        adapter.setAllItems(a, null, c);
+        adapter.setAllItems(header, null, content);
 
 
         final PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

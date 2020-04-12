@@ -18,7 +18,16 @@
         android:layout_toRightOf="@+id/avatar"
         android:paddingBottom="4dp"
         android:text="unisec bot" />
-
+    <TextView
+        android:id="@+id/tv_view_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scroll_bot_message"
+        android:layout_alignLeft="@+id/tv_bot_name"
+        android:textAlignment="center"
+        android:text="xem thêm"
+        android:textSize="16sp"
+        android:background="@color/white"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scroll_bot_message"
         android:layout_width="match_parent"
@@ -26,7 +35,7 @@
         android:maxHeight="300dp"
         android:layout_below="@+id/tv_bot_name"
         android:layout_alignLeft="@+id/tv_bot_name"
-        android:background="@drawable/bg_bot_message"
+        android:background="@color/white"
         android:elevation="2dp"
         android:text="How are you doing? This is a long message that should probably wrap."
         android:textSize="18dp" >
@@ -36,17 +45,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_view_more"/>
-        <TextView
-            android:id="@+id/tv_view_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/table_bot_message"
-            app:layout_constraintLeft_toLeftOf="@id/scroll_bot_message"
-            android:textAlignment="center"
-            android:text="xem thêm"
-            android:textSize="16sp"
-            android:background="@color/white"/>
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <View
         android:id="@+id/avatar"
