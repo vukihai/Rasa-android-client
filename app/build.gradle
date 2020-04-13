@@ -12,6 +12,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -40,4 +44,5 @@ dependencies {
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.evrencoskun.library:tableview:0.8.9'
 }

@@ -58,6 +58,7 @@ public class ChatFragment extends Fragment {
 
         }
         mSocket.emit("user_uttered", sendData);
+        if(getActivity() == null) return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -69,6 +70,7 @@ public class ChatFragment extends Fragment {
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            if(getActivity() == null) return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -80,6 +82,7 @@ public class ChatFragment extends Fragment {
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            if(getActivity() == null) return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -92,6 +95,7 @@ public class ChatFragment extends Fragment {
     private Emitter.Listener onNewMessage = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
+            if(getActivity() == null) return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -104,6 +108,7 @@ public class ChatFragment extends Fragment {
                             Log.d("vukihai", data.toString());
                             final String mess = data.getString("text");
                             if (mess != null) {
+                                if(getActivity() == null) return;
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -123,6 +128,7 @@ public class ChatFragment extends Fragment {
                             if (table.length() != 0) {
                                 final ChatMessage mes = new ChatMessage(table, true);
                                 mes.setBotTable(true);
+                                if(getActivity() == null) return;
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -140,6 +146,7 @@ public class ChatFragment extends Fragment {
                             if (slider != null) {
                                 final ChatMessage mes = new ChatMessage(slider, true);
                                 mes.setBotSlider(true);
+                                if(getActivity() == null) return;
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -158,6 +165,7 @@ public class ChatFragment extends Fragment {
                             if (slider != null) {
                                 final ChatMessage mes = new ChatMessage(slider, true);
                                 mes.setBotHtmlview(true);
+                                if(getActivity() == null) return;
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

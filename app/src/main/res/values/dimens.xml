@@ -8,7 +8,12 @@
     <dimen name="bottom_navigation_height_op">-56dp</dimen>
     <dimen name="bottom_chat_listview_margin">64dp</dimen>
     <dimen name="default_left_margin">12dp</dimen>
-    <dimen name="bot_slider_height">300dp</dimen>
+    <dimen name="bot_slider_height">224dp</dimen>
     <dimen name="bot_slider_width">200dp</dimen>
     <dimen name="bot_slider_margin">4dp</dimen>
+    <dimen name="table_view_cell_height">28dp</dimen>
+    <dimen name="table_view_row_header_width">28dp</dimen>
+    <dimen name="table_view_default_text_size">11sp</dimen>
+    <dimen name="default_row_header_width">1dp</dimen>
+    <dimen name="default_column_header_height">28dp</dimen>
 </resources>

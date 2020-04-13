@@ -34,5 +34,5 @@
     <string name="speech_prompt">Đang nghe...</string>
     <string name="speech_not_supported">Thiết bị không hỗ trợ nhận diện giọng nói.</string>
     <string name="connected">đã kết nối</string>
-    <string name="connect_error">không có kết nối</string>
+    <string name="connect_error">không thể kết nối đến server</string>
 </resources>
