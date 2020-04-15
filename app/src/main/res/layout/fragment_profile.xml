@@ -27,6 +27,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:src="@drawable/avatar"
                />
 
             <LinearLayout
@@ -78,57 +79,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
         </LinearLayout>
-
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="3dp"-->
-        <!--            android:background="@android:color/white"-->
-        <!--            android:gravity="center_vertical"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:paddingLeft="@dimen/activity_horizontal_margin"-->
-        <!--            android:paddingRight="@dimen/activity_horizontal_margin">-->
-
-        <!--            <ImageView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                app:srcCompat="@drawable/ic_close" />-->
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/tv_dang_xuat"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                android:gravity="center_vertical"-->
-        <!--                android:layout_marginLeft="3dp"-->
-        <!--                android:textSize="18sp"-->
-        <!--                android:text="Đăng xuất" />-->
-
-        <!--        </LinearLayout>-->
-
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:background="@android:color/white"-->
-        <!--            android:gravity="center_vertical"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:paddingLeft="@dimen/activity_horizontal_margin"-->
-        <!--            android:paddingRight="@dimen/activity_horizontal_margin">-->
-
-        <!--            <ImageView-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                app:srcCompat="@drawable/ic_help" />-->
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/tv_lien_he"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent"-->
-        <!--                android:gravity="center_vertical"-->
-        <!--                android:layout_marginLeft="3dp"-->
-        <!--                android:textSize="18sp"-->
-        <!--                android:text="Liên hệ" />-->
-
-        <!--        </LinearLayout>-->
 
     </LinearLayout>
 

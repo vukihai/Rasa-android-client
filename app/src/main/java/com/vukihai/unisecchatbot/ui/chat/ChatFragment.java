@@ -29,8 +29,8 @@ public class ChatFragment extends Fragment {
 
     {
         try {
-            mSocket = IO.socket("http://192.168.2.111:5005");
-
+            //mSocket = IO.socket("https://61d62855.ngrok.io/");
+            mSocket = IO.socket("https://11ce86b1.ngrok.io/");
         } catch (URISyntaxException e) {
 
         }
