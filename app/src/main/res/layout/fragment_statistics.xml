@@ -24,13 +24,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="parse"
+        android:text="tỉ lệ hỏi các ngành"
         android:id="@+id/btn_parse"
         tools:ignore="MissingConstraints" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="display"
+        android:text="tỉ lệ hỏi các trường"
         android:id="@+id/btn_display"
         app:layout_constraintLeft_toRightOf="@id/btn_parse"
         android:layout_toRightOf="@id/btn_parse"
