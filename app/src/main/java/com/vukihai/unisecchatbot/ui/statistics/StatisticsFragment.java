@@ -121,6 +121,7 @@ public class StatisticsFragment extends Fragment {
                                 major_name.add(majorName);
                                 major_quantity.add(quantity);
                                 Log.e("DVT","name:" + majorName);
+                                if(getActivity() != null)
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {

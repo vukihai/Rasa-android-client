@@ -197,42 +197,47 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/navigation_header_height"
+                android:layout_height="wrap_content"
                 android:background="#9fa8da"
                 android:gravity="bottom"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingBottom="16dp"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="#FFFFFFFF"
+                    android:id="@+id/profile"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="12dp"
+                    android:elevation="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/avatar" />
 
-                <ImageView
-                    android:id="@+id/activity_main_imv_avatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
 
                 <TextView
                     android:id="@+id/activity_main_tv_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/activity_vertical_margin"
-                    android:text="Yellow Code"
+                    android:text="Luna"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <TextView
                     android:id="@+id/activity_main_tv_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="yellowcode.books@gmail.com" />
+                    android:text="Luna@gmail.com" />
 
             </LinearLayout>
 
             <!-- Item Info -->
 
             <LinearLayout
+                android:id="@+id/menu_account"
+                android:onClick="onClick"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/navigation_item_height"
                 android:layout_marginTop="3dp"
@@ -242,21 +247,26 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin">
 
-<!--                <ImageView-->
-<!--                    android:layout_width="@dimen/navigation_item_icon_size"-->
-<!--                    android:layout_height="@dimen/navigation_item_icon_size"-->
-<!--                    android:srcCompat="@drawable/ic_account_circle_black_24dp" />-->
+                <ImageView
+                    android:layout_width="@dimen/navigation_item_icon_size"
+                    android:layout_height="@dimen/navigation_item_icon_size"
+                    app:srcCompat="@drawable/ic_account_circle_black_24dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="32dp"
                     android:layout_marginBottom="4dp"
+                    android:gravity="center|left"
+                    android:textSize="14sp"
                     android:text="tài khoản" />
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/menu_statistic"
+                android:onClick="onClick"
                 android:layout_height="@dimen/navigation_item_height"
                 android:layout_marginTop="3dp"
                 android:background="@android:color/white"
@@ -265,21 +275,26 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin">
 
-                <!--                <ImageView-->
-                <!--                    android:layout_width="@dimen/navigation_item_icon_size"-->
-                <!--                    android:layout_height="@dimen/navigation_item_icon_size"-->
-                <!--                    android:srcCompat="@drawable/ic_account_circle_black_24dp" />-->
+                <ImageView
+                    android:layout_width="@dimen/navigation_item_icon_size"
+                    android:layout_height="@dimen/navigation_item_icon_size"
+                    app:srcCompat="@drawable/ic_assessment_black_24dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="32dp"
                     android:layout_marginBottom="4dp"
+                    android:gravity="center|left"
+                    android:textSize="14sp"
                     android:text="thống kê" />
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/menu_setting"
+                android:onClick="onClick"
                 android:layout_height="@dimen/navigation_item_height"
                 android:layout_marginTop="3dp"
                 android:background="@android:color/white"
@@ -288,21 +303,26 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin">
 
-                <!--                <ImageView-->
-                <!--                    android:layout_width="@dimen/navigation_item_icon_size"-->
-                <!--                    android:layout_height="@dimen/navigation_item_icon_size"-->
-                <!--                    android:srcCompat="@drawable/ic_account_circle_black_24dp" />-->
+                <ImageView
+                    android:layout_width="@dimen/navigation_item_icon_size"
+                    android:layout_height="@dimen/navigation_item_icon_size"
+                    app:srcCompat="@drawable/ic_settings_black_24dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="32dp"
                     android:layout_marginBottom="4dp"
+                    android:gravity="center|left"
+                    android:textSize="14sp"
                     android:text="cài đặt" />
 
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/menu_exit"
+                android:onClick="onClick"
                 android:layout_height="@dimen/navigation_item_height"
                 android:layout_marginTop="3dp"
                 android:background="@android:color/white"
@@ -311,16 +331,19 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin">
 
-                <!--                <ImageView-->
-                <!--                    android:layout_width="@dimen/navigation_item_icon_size"-->
-                <!--                    android:layout_height="@dimen/navigation_item_icon_size"-->
-                <!--                    android:srcCompat="@drawable/ic_account_circle_black_24dp" />-->
+                <ImageView
+                    android:layout_width="@dimen/navigation_item_icon_size"
+                    android:layout_height="@dimen/navigation_item_icon_size"
+                    app:srcCompat="@drawable/ic_exit_to_app_black_24dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="32dp"
                     android:layout_marginBottom="4dp"
+                    android:gravity="center|left"
+                    android:textSize="14sp"
                     android:text="đăng xuất" />
 
             </LinearLayout>

@@ -24,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
             Log.d("vukihai", "test back button");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        getSupportActionBar().hide();
     }
 
     @Override

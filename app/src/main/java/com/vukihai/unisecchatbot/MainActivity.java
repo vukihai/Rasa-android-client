@@ -8,6 +8,7 @@ import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +20,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vukihai.unisecchatbot.ui.StatisticsActivity;
 import com.vukihai.unisecchatbot.ui.chat.ChatFragment;
 import com.vukihai.unisecchatbot.ui.settings.SettingsActivity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText chatMessageEditText;
     private ImageButton sendButton, voiceButton;
     private TextView networkStatusTextView;
+    private DrawerLayout drawerLayout;
+    private Intent statisticIntent;
 //    private BottomSheetBehavior bottomSheetBehavior;
 
 
@@ -74,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sendButton = findViewById(R.id.btn_send);
         voiceButton = findViewById(R.id.btn_voice);
         networkStatusTextView = findViewById(R.id.tv_network_status);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
         // instance.
 //        fragments = new Fragment[NUM_PAGES];
 //        fragments[0] = new ProfileFragment();
@@ -139,8 +147,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.btn_setting) {
-            if (settingIntent == null) settingIntent = new Intent(this, SettingsActivity.class);
-            startActivity(settingIntent);
+            if(this.drawerLayout.isDrawerOpen(Gravity.RIGHT)){
+                this.drawerLayout.closeDrawers();
+            } else {
+                this.drawerLayout.openDrawer(Gravity.RIGHT);
+            }
         }
         if (id == android.R.id.home)
             this.finish();
@@ -194,6 +205,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_voice:
                 promptSpeechInput();
                 break;
+            case R.id.menu_statistic:
+                if(statisticIntent == null) statisticIntent = new Intent(this, StatisticsActivity.class);
+                startActivity(statisticIntent);
+                break;
+            case R.id.menu_setting:
+                if(settingIntent == null) settingIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingIntent);
+                break;
+//            case R.id.menu_account:
 
         }
     }
