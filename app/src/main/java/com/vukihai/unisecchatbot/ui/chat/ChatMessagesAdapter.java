@@ -2,7 +2,7 @@ package com.vukihai.unisecchatbot.ui.chat;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.AttributeSet;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -18,12 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.evrencoskun.tableview.TableView;
+import com.vukihai.unisecchatbot.MainActivity;
 import com.vukihai.unisecchatbot.R;
 import com.vukihai.unisecchatbot.data.model.ChatMessage;
 import com.vukihai.unisecchatbot.ui.chat.bot_table_view.BotCell;
 import com.vukihai.unisecchatbot.ui.chat.bot_table_view.BotColumnHeader;
-import com.vukihai.unisecchatbot.ui.chat.bot_table_view.BotRowHeader;
-import com.vukihai.unisecchatbot.ui.chat.bot_table_view.BotTableModel;
+
 import com.vukihai.unisecchatbot.ui.chat.bot_table_view.TableAdapter;
 import com.vukihai.unisecchatbot.ui.chat.bot_table_view.TableListener;
 
@@ -31,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -49,11 +53,20 @@ public class ChatMessagesAdapter extends BaseAdapter {
         ChatMessage ch1 = new ChatMessage("[{'name': 'chọn trường', 'img': 'http://www.wikipedia.org/portal/wikipedia.org/assets/img/Wikipedia-logo-v2.png', 'payload':'chọn trường'},{'name': 'chọn ngành', 'img': 'http://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg', 'payload':'chọn ngành'}]", true);
         ch1.setBotSlider(true);
         this.chatMessages.add(ch1);
+        ChatMessage ch2 = new ChatMessage("{\n" +
+                "      \"table\": [\n" +
+                "        \"miền Bắc\",\n" +
+                "        \"miền Trung\",\n" +
+                "        \"miền Nam\"\n" +
+                "      ]\n" +
+                "    }", true);
+        ch2.setBotButton(true);
+        this.chatMessages.add(ch2);
     }
 
     public void addMessage(ChatMessage message) {
         try {
-            if (this.chatMessages.get(this.chatMessages.size() - 1).isBotSlider())
+            if (this.chatMessages.get(this.chatMessages.size() - 1).isBotMessage() && (this.chatMessages.get(this.chatMessages.size() - 1).isBotSlider() || this.chatMessages.get(this.chatMessages.size() - 1).isBotButton()))
                 this.chatMessages.remove(this.chatMessages.size() - 1);
             this.notifyDataSetChanged();
         } catch (Exception e) {
@@ -84,14 +97,44 @@ public class ChatMessagesAdapter extends BaseAdapter {
 
         final ChatMessage message = this.chatMessages.get(i);
         if (message.isBotMessage()) {
-            Log.d("vukihai", message.getText());
+//            Log.d("vukihai", message.getText());
             if (message.isBotSlider()) {
                 view = layoutInflater.inflate(R.layout.item_bot_slider, null);
                 RecyclerView recyclerView = view.findViewById(R.id.list_bot_slider);
                 SliderAdapter sliderAdapter = new SliderAdapter(message.getText(), context);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(sliderAdapter);
-            } else if (message.isBotHtmlview()) {
+            } else if(message.isBotButton()){
+                view = layoutInflater.inflate(R.layout.item_bot_button, null);
+                ListView listView = view.findViewById(R.id.list_bot_button);
+                ArrayList<String> b = new ArrayList<>();
+//                Log.d("vukihai", message.getText());
+                try {
+                    JSONArray ja= new JSONArray(message.getText());
+                    Log.d("vukihai", "" + ja.length());
+                    for(int j=0; j<ja.length(); j++) {
+                        b.add(ja.getString(j));
+                        Log.d("vukihai", "" + ja.getString(j));
+                    }
+                } catch (Exception e) {
+                }
+                Log.d("vukihai", "" + b.size());
+                Object[] gfg= b.toArray();
+                String[] a = Arrays.copyOf(gfg,
+                        gfg.length,
+                        String[].class);
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, R.layout.subitem_bot_button, R.id.textView,a);
+                listView.setAdapter(arrayAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        String item = (String) adapterView.getItemAtPosition(i);
+                        ((MainActivity)context).sendMessage(item);
+                    }
+                });
+
+            }else if (message.isBotHtmlview()) {
                 view = layoutInflater.inflate(R.layout.item_bot_htmlview, null);
                 final WebView messWebView = view.findViewById(R.id.wv_bot_message);
                 messWebView.setFocusable(false);
@@ -109,8 +152,8 @@ public class ChatMessagesAdapter extends BaseAdapter {
                 TableAdapter adapter = new TableAdapter(context);
                 tableView.setAdapter(adapter);
                 tableView.setTableViewListener(new TableListener(tableView));
-                List<BotColumnHeader> header = new ArrayList<>();
-                List<List<BotCell>> content = new ArrayList<>();
+                final List<BotColumnHeader> header = new ArrayList<>();
+                final List<List<BotCell>> content = new ArrayList<>();
                 String [][] tableContent;
                 try {
                     JSONArray jsona = new JSONArray(message.getText());
@@ -144,6 +187,7 @@ public class ChatMessagesAdapter extends BaseAdapter {
                 messTextView.setText(message.getText());
             }
         } else {
+//            Log.d("vukihai","user message " + message.getText());
             view = layoutInflater.inflate(R.layout.item_user_message, null);
             TextView messTextView = view.findViewById(R.id.tv_user_message);
             messTextView.setText(message.getText());
@@ -175,7 +219,7 @@ public class ChatMessagesAdapter extends BaseAdapter {
         View view = ((Activity) context).getLayoutInflater().inflate(R.layout.layout_bot_table_full, null, false);
         TableAdapter adapter = new TableAdapter(context);
         ((TableView) view.findViewById(R.id.table_bot_message)).setAdapter(adapter);
-        ((TableView) view.findViewById(R.id.table_bot_message)).setTableViewListener(new TableListener(view.findViewById(R.id.table_bot_message)));
+        ((TableView) view.findViewById(R.id.table_bot_message)).setTableViewListener(new TableListener((TableView)(view.findViewById(R.id.table_bot_message))));
         adapter.setAllItems(header, null, content);
 
 

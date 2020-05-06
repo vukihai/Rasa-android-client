@@ -1,5 +1,6 @@
 package com.vukihai.unisecchatbot.ui.chat;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,8 +30,7 @@ public class ChatFragment extends Fragment {
 
     {
         try {
-            //mSocket = IO.socket("https://61d62855.ngrok.io/");
-            mSocket = IO.socket("https://11ce86b1.ngrok.io/");
+            mSocket = IO.socket("http://db3b37cc.ngrok.io");
         } catch (URISyntaxException e) {
 
         }
@@ -58,6 +58,7 @@ public class ChatFragment extends Fragment {
 
         }
         mSocket.emit("user_uttered", sendData);
+//        Log.d("vukihai", "send message " + message);
         if(getActivity() == null) return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -100,12 +101,12 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void run() {
                     try {
-//                    for( int i = 0; i <args.length; i++) {
-//                        Log.d("vukihai", args[i].toString());
-//                    }
+//                        for( int i = 0; i <args.length; i++) {
+//                            Log.d("vukihai", args[i].toString());
+//                        }
                         JSONObject data = (JSONObject) args[0];
                         try {
-                            Log.d("vukihai", data.toString());
+//                            Log.d("vukihai", data.toString());
                             final String mess = data.getString("text");
                             if (mess != null) {
                                 if(getActivity() == null) return;
@@ -124,7 +125,7 @@ public class ChatFragment extends Fragment {
                         }
                         try {
                             final String table = data.getJSONArray("table").toString();
-                            Log.d(" ", table);
+                            Log.d("vukihai", table);
                             if (table.length() != 0) {
                                 final ChatMessage mes = new ChatMessage(table, true);
                                 mes.setBotTable(true);
@@ -142,7 +143,7 @@ public class ChatFragment extends Fragment {
                             Log.d("vukihai", e.toString());
                         }
                         try {
-                            final String slider = data.getJSONArray(("slider")).toString();
+                            final String slider = data.getJSONArray("slider").toString();
                             if (slider != null) {
                                 final ChatMessage mes = new ChatMessage(slider, true);
                                 mes.setBotSlider(true);
@@ -159,6 +160,25 @@ public class ChatFragment extends Fragment {
                         } catch (JSONException e) {
                             Log.d("vukihai", e.toString());
 
+                        }
+                        try {
+                            final String btn = data.getJSONArray("button").toString();
+//                            Log.d(" ", table);
+                            if (btn.length() != 0) {
+                                final ChatMessage mes = new ChatMessage(btn, true);
+                                mes.setBotButton(true);
+                                if(getActivity() == null) return;
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        chatMessagesAdapter.addMessage(mes);
+                                        chatMessagesListView.setSelection(chatMessagesAdapter.getCount() - 1);
+                                    }
+                                });
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            Log.d("vukihai", e.toString());
                         }
                         try {
                             final String slider = data.getJSONArray(("htmlview")).toString();

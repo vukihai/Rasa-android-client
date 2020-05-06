@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -20,18 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.vukihai.unisecchatbot.ui.chat.ChatFragment;
-import com.vukihai.unisecchatbot.ui.profile.ProfileFragment;
 import com.vukihai.unisecchatbot.ui.settings.SettingsActivity;
-import com.vukihai.unisecchatbot.ui.statistics.StatisticsFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -59,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int NUM_PAGES = 3;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
-    private Fragment[] fragments;
+//    private Fragment[] fragments;
 
     private boolean doubleBackPressedOnce = false;
 
@@ -81,17 +75,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         voiceButton = findViewById(R.id.btn_voice);
         networkStatusTextView = findViewById(R.id.tv_network_status);
         // instance.
-        fragments = new Fragment[NUM_PAGES];
-        fragments[0] = new ProfileFragment();
-        fragments[1] = new ChatFragment();
-        fragments[2] = new StatisticsFragment();
+//        fragments = new Fragment[NUM_PAGES];
+//        fragments[0] = new ProfileFragment();
+//        fragments[1] = new ChatFragment();
+//        fragments[2] = new StatisticsFragment();
 
-        mViewPager = findViewById(R.id.pager_main);
-        mPagerAdapter = new SlidePagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setPageTransformer(true, new MyPagerTransformer());
-        mViewPager.setOffscreenPageLimit(3);
-        mViewPager.setCurrentItem(1);
+//        mViewPager = findViewById(R.id.pager_main);
+//        mPagerAdapter = new SlidePagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+//        mViewPager.setAdapter(mPagerAdapter);
+//        mViewPager.setPageTransformer(true, new MyPagerTransformer());
+//        mViewPager.setOffscreenPageLimit(3);
+//        mViewPager.setCurrentItem(1);
 
         chatMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -194,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mViewPager.setCurrentItem(2,true);
                 break;
             case R.id.btn_send:
-                ((ChatFragment)fragments[1]).send(chatMessageEditText.getText().toString());
+                ((ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat)).send(chatMessageEditText.getText().toString());
                 chatMessageEditText.setText("");
                 break;
             case R.id.btn_voice:
@@ -205,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void sendMessage(String message) {
         if(message.length() != 0)
-            ((ChatFragment)fragments[1]).send(message);
+            ((ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat)).send(message);
     }
 //    }
     private void promptSpeechInput() {
@@ -230,93 +224,92 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
-
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    ((ChatFragment)fragments[1]).send(result.get(0));
+                    ((ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat)).send(result.get(0));
                 }
                 break;
             }
 
         }
     }
-    private class SlidePagerAdapter extends FragmentStatePagerAdapter {
-
-        public SlidePagerAdapter(@NonNull FragmentManager fm, int behavior) {
-            super(fm, behavior);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragments[position];
-        }
-
-        @Override
-        public int getCount() {
-            return NUM_PAGES;
-        }
-    }
+//    private class SlidePagerAdapter extends FragmentStatePagerAdapter {
+//
+//        public SlidePagerAdapter(@NonNull FragmentManager fm, int behavior) {
+//            super(fm, behavior);
+//        }
+//
+//        @NonNull
+//        @Override
+//        public Fragment getItem(int position) {
+//            return fragments[position];
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return NUM_PAGES;
+//        }
+//    }
 
 
     /**
      * animation for bottom navigation.
      */
-    private class MyPagerTransformer implements ViewPager.PageTransformer {
-
-        @Override
-        public void transformPage(@NonNull View page, float position) {
-            float pageHeight = getResources().getDimension(R.dimen.bottom_navigation_height);
-            int pageWidth = page.getWidth();
-            if (mViewPager.getCurrentItem() == 0) {
-                if (position >= -1 && position <= 0) {
-                    suggestHorizontalScrollView.setTranslationY(position * pageHeight);
-                    suggestHorizontalScrollView.setAlpha(-position*3-2);
-                    bottomNavConstraintLayout.setTranslationY(position * pageHeight);
-                    chatInputLinearLayout.setTranslationY(position * pageHeight);
-                    chatImageView.setTranslationY(position * pageHeight);
-                    profileImageView.setTranslationX(position * (pageWidth/10));
-                    statisticImageView.setTranslationX(-position * (pageWidth/10));
-
-                }
-            }
-            if (mViewPager.getCurrentItem() == 1) {
-                if (position < -1) {
-                    page.setAlpha(1);
-                } else if (position <= 0) {
-                    suggestHorizontalScrollView.setTranslationY(position * pageHeight);
-                    suggestHorizontalScrollView.setAlpha(-position*3-2);
-                    bottomNavConstraintLayout.setTranslationY(position *pageHeight);
-                    chatInputLinearLayout.setTranslationY(position *pageHeight );
-                    chatImageView.setTranslationY(position * pageHeight);
-                    profileImageView.setTranslationX(position * (pageWidth/10));
-                    statisticImageView.setTranslationX(-position * (pageWidth/10));
-                } else if (position <= 1) {
-                    suggestHorizontalScrollView.setTranslationY(-position * pageHeight);
-                    suggestHorizontalScrollView.setAlpha(position*3-2);
-                    bottomNavConstraintLayout.setTranslationY(-position* pageHeight);
-                    chatInputLinearLayout.setTranslationY(-position* pageHeight);
-                    chatImageView.setTranslationY(-position* pageHeight);
-                    profileImageView.setTranslationX(-position * (pageWidth/10));
-                    statisticImageView.setTranslationX(position * (pageWidth/10));
-
-                } else {
-                    page.setAlpha(1);
-                }
-            }
-
-            if (mViewPager.getCurrentItem() == 2) {
-                if (position >= 0 && position <= 1) {
-                    suggestHorizontalScrollView.setTranslationY(-position * pageHeight);
-                    suggestHorizontalScrollView.setAlpha(position*3-2);
-                    bottomNavConstraintLayout.setTranslationY(-position * pageHeight);
-                    chatInputLinearLayout.setTranslationY(-position * pageHeight);
-                    chatImageView.setTranslationY(-position * pageHeight);
-                    profileImageView.setTranslationX(-position * (pageWidth/10));
-                    statisticImageView.setTranslationX(position * (pageWidth/10));
-
-                }
-            }
-
-        }
-    }
+//    private class MyPagerTransformer implements ViewPager.PageTransformer {
+//
+//        @Override
+//        public void transformPage(@NonNull View page, float position) {
+//            float pageHeight = getResources().getDimension(R.dimen.bottom_navigation_height);
+//            int pageWidth = page.getWidth();
+//            if (mViewPager.getCurrentItem() == 0) {
+//                if (position >= -1 && position <= 0) {
+//                    suggestHorizontalScrollView.setTranslationY(position * pageHeight);
+//                    suggestHorizontalScrollView.setAlpha(-position*3-2);
+//                    bottomNavConstraintLayout.setTranslationY(position * pageHeight);
+//                    chatInputLinearLayout.setTranslationY(position * pageHeight);
+//                    chatImageView.setTranslationY(position * pageHeight);
+//                    profileImageView.setTranslationX(position * (pageWidth/10));
+//                    statisticImageView.setTranslationX(-position * (pageWidth/10));
+//
+//                }
+//            }
+//            if (mViewPager.getCurrentItem() == 1) {
+//                if (position < -1) {
+//                    page.setAlpha(1);
+//                } else if (position <= 0) {
+//                    suggestHorizontalScrollView.setTranslationY(position * pageHeight);
+//                    suggestHorizontalScrollView.setAlpha(-position*3-2);
+//                    bottomNavConstraintLayout.setTranslationY(position *pageHeight);
+//                    chatInputLinearLayout.setTranslationY(position *pageHeight );
+//                    chatImageView.setTranslationY(position * pageHeight);
+//                    profileImageView.setTranslationX(position * (pageWidth/10));
+//                    statisticImageView.setTranslationX(-position * (pageWidth/10));
+//                } else if (position <= 1) {
+//                    suggestHorizontalScrollView.setTranslationY(-position * pageHeight);
+//                    suggestHorizontalScrollView.setAlpha(position*3-2);
+//                    bottomNavConstraintLayout.setTranslationY(-position* pageHeight);
+//                    chatInputLinearLayout.setTranslationY(-position* pageHeight);
+//                    chatImageView.setTranslationY(-position* pageHeight);
+//                    profileImageView.setTranslationX(-position * (pageWidth/10));
+//                    statisticImageView.setTranslationX(position * (pageWidth/10));
+//
+//                } else {
+//                    page.setAlpha(1);
+//                }
+//            }
+//
+//            if (mViewPager.getCurrentItem() == 2) {
+//                if (position >= 0 && position <= 1) {
+//                    suggestHorizontalScrollView.setTranslationY(-position * pageHeight);
+//                    suggestHorizontalScrollView.setAlpha(position*3-2);
+//                    bottomNavConstraintLayout.setTranslationY(-position * pageHeight);
+//                    chatInputLinearLayout.setTranslationY(-position * pageHeight);
+//                    chatImageView.setTranslationY(-position * pageHeight);
+//                    profileImageView.setTranslationX(-position * (pageWidth/10));
+//                    statisticImageView.setTranslationX(position * (pageWidth/10));
+//
+//                }
+//            }
+//
+//        }
+//    }
 }
