@@ -16,4 +16,8 @@
     <dimen name="table_view_default_text_size">11sp</dimen>
     <dimen name="default_row_header_width">1dp</dimen>
     <dimen name="default_column_header_height">28dp</dimen>
+    <dimen name="navigation_header_height">160dp</dimen>
+    <dimen name="navigation_item_height">48dp</dimen>
+    <dimen name="navigation_item_icon_size">24dp</dimen>
+    <dimen name="chat_input_translate_y">-56dp</dimen>
 </resources>

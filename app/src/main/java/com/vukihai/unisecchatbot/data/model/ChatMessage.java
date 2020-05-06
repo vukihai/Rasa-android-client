@@ -6,6 +6,7 @@ public class ChatMessage {
     private boolean isBotSlider;
     private boolean isBotHtmlview;
     private boolean isBotTable;
+    private boolean isBotButton;
     public ChatMessage(String text, boolean isBotMessage) {
         this.text = text;
         this.isBotMessage = isBotMessage;
@@ -49,5 +50,13 @@ public class ChatMessage {
 
     public void setBotTable(boolean botTable) {
         isBotTable = botTable;
+    }
+
+    public boolean isBotButton() {
+        return isBotButton;
+    }
+
+    public void setBotButton(boolean botButton) {
+        isBotButton = botButton;
     }
 }

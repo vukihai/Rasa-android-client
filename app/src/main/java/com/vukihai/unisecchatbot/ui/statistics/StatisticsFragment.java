@@ -95,15 +95,32 @@ public class StatisticsFragment extends Fragment {
         data.setValueTextSize(10f);
         data.setValueTextColor(Color.RED);
         pieChart.setData(data);
-        buttonDisplay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        jsonParse();
+        return root;
+    }
+    private void jsonParse(){
+        String url = "http://77c0975d.ngrok.io/intent";
 
-                ArrayList<PieEntry> yvalues = new ArrayList<>();
-                for(int i = 0; i < intent_name.size(); i++){
-                    yvalues.add(new PieEntry(intent_quantity.get(i), intent_name.get(i)));
-                    Log.e("DVT", "name:" + intent_name.get(i));
-                }
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i = 0; i < response.length(); i++){
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String intentName = jsonObject.getString("intent_name");
+                                int quantity = jsonObject.getInt("quantity");
+                                intent_name.add(intentName);
+                                intent_quantity.add(quantity);
+                                Log.e("DVT","name:" + intentName);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ArrayList<PieEntry> yvalues = new ArrayList<>();
+                                        for(int i = 0; i < intent_name.size(); i++){
+                                            yvalues.add(new PieEntry(intent_quantity.get(i), intent_name.get(i)));
+                                            Log.e("DVT", "name:" + intent_name.get(i));
+                                        }
 
                 /*pieChart.setUsePercentValues(true);
                 pieChart.getDescription().setEnabled(false);
@@ -119,34 +136,18 @@ public class StatisticsFragment extends Fragment {
                 /*Description description = new Description();
                 description.setText("Biểu đồ tỉ lệ hỏi các trường đại học");
                 description.setTextSize(9);*/
-                //pieChart.setDescription(description);
-                PieDataSet dataSet = new PieDataSet(yvalues, "School");
-                dataSet.setSliceSpace(1f);
-                dataSet.setSelectionShift(10f);
-                dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
-                PieData data = new PieData(dataSet);
-                data.setValueTextSize(10f);
-                data.setValueTextColor(Color.RED);
-                pieChart.setData(data);
-            }
-        });
-        return root;
-    }
-    private void jsonParse(){
-        String url = "http://f846a3dc.ngrok.io/intent";
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for(int i = 0; i < response.length(); i++){
-                            try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                String intentName = jsonObject.getString("intent_name");
-                                int quantity = jsonObject.getInt("quantity");
-                                intent_name.add(intentName);
-                                intent_quantity.add(quantity);
-                                Log.e("DVT","name:" + intentName);
+                                        //pieChart.setDescription(description);
+                                        PieDataSet dataSet = new PieDataSet(yvalues, "School");
+                                        dataSet.setSliceSpace(1f);
+                                        dataSet.setSelectionShift(10f);
+                                        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+                                        PieData data = new PieData(dataSet);
+                                        data.setValueTextSize(10f);
+                                        data.setValueTextColor(Color.RED);
+                                        pieChart.setData(data);
+                                        pieChart.invalidate();
+                                    }
+                                });
                                 //mTextView.append(intentName);
                             } catch (JSONException e) {
                                 e.printStackTrace();
