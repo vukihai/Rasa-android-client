@@ -222,14 +222,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/activity_vertical_margin"
-                    android:text="Luna"
+                    android:text="Mei"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <TextView
                     android:id="@+id/activity_main_tv_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Luna@gmail.com" />
+                    android:text="Mei@gmail.com" />
 
             </LinearLayout>
 
